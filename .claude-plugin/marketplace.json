@@ -1,0 +1,13 @@
+{
+  "name": "opencode-subagentlink",
+  "description": "Unofficial plugin that lets Claude Code delegate tasks to OpenCode V2 agents.",
+  "owner": {"name": "Mushst"},
+  "plugins": [
+    {
+      "name": "opencode-subagentlink",
+      "source": "./",
+      "description": "Unofficial. Delegate tasks from Claude Code to your OpenCode V2 agents and get the results back.",
+      "category": "development"
+    }
+  ]
+}
