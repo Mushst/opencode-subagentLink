@@ -12,11 +12,11 @@ set up, and `python3` 3.10 or later on your PATH.
 1. In Claude Code, install the plugin:
 
    ```text
-   /plugin install opencode-subagentlink --marketplace Mushst/Claude_OpencodeBridge
+   /plugin install opencode-subagentlink --marketplace Mushst/opencode-subagentLink
    ```
 
    On older Claude Code versions, run
-   `/plugin marketplace add Mushst/Claude_OpencodeBridge`, then
+   `/plugin marketplace add Mushst/opencode-subagentLink`, then
    `/plugin install opencode-subagentlink@opencode-subagentlink`.
 2. Start a new Claude Code session and type `/opencode-subagentlink:delegate`.
 3. Claude asks the setup questions: your consent to the terms below, and which

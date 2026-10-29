@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Unofficial. Delegate tasks from Claude Code to your OpenCode V2 agents and get the results back.",
   "author": {"name": "Mushst"},
-  "repository": "https://github.com/Mushst/Claude_OpencodeBridge",
+  "repository": "https://github.com/Mushst/opencode-subagentLink",
   "license": "Apache-2.0",
   "keywords": ["opencode", "delegation", "subagents", "mcp"]
 }
