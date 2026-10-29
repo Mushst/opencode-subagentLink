@@ -116,8 +116,8 @@ background service.
 
 ```sh
 claude --plugin-dir .                       # load this checkout as a plugin
-python -m unittest discover -s tests -v     # unit tests, with a fake OpenCode
-BRIDGE_TEST_OPENCODE=$(command -v opencode) python -m unittest discover -s tests -p 'test_live.py'
+PYTHONPATH=src python -m unittest discover -s tests -v     # unit tests, with a fake OpenCode
+PYTHONPATH=src BRIDGE_TEST_OPENCODE=$(command -v opencode) python -m unittest discover -s tests -p 'test_live.py'
 claude plugin validate .
 ```
 

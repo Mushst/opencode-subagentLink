@@ -17,8 +17,7 @@ agents: they use the user's OpenCode permissions and providers.
    - `consent`: pass `consent: true` only after the user agrees in this
      conversation.
    - `default_agent`: call `agents` first. Show each agent's id, description,
-     mode, and model. Agents with mode `subagent` are meant to be called by
-     other agents; suggest a `primary` or `all` agent.
+     and model, and let the user pick. Any mode works, `subagent` included.
    - If the user runs their own OpenCode server, save `server` as its URL (for
      example `http://127.0.0.1:4096`) and `password_file` as the file that holds
      its password. Never ask for the password itself.
