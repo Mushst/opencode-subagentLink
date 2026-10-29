@@ -14,13 +14,13 @@ import threading
 import time
 import unittest
 from unittest.mock import MagicMock, patch
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import urlopen
 
 import opencode_subagentlink
 from opencode_subagentlink import settings
-from opencode_subagentlink.api import Client, brief, default_title
+from opencode_subagentlink.api import Client, WaitExpired, brief, default_title
 from opencode_subagentlink.mcp import TOOLS, Bridge, dispatch, setup_status, validate
 from opencode_subagentlink.runtime import PrivateServer, connect_private, run_path
 
@@ -374,6 +374,20 @@ class HTTPTests(unittest.TestCase):
         self.assertTrue(result["wait_timeout"])
         self.assertLess(time.monotonic() - start, 0.8)
         self.assertIsNone(self.client.deadline)
+
+    def test_timeout_of_a_budget_bounded_request_is_budget_expiry(self):
+        # Socket timers and time.monotonic can disagree by a clock tick (Windows), so the timeout may
+        # fire just before the deadline; it must still read as budget expiry, not an unreachable server.
+        self.client.deadline = time.monotonic() + 5
+        try:
+            with patch.object(self.client.opener, "open", side_effect=URLError(TimeoutError("timed out"))):
+                with self.assertRaises(WaitExpired):
+                    self.client.api("get", "/large")
+            with patch.object(self.client.opener, "open", side_effect=URLError(ConnectionRefusedError())):
+                with self.assertRaisesRegex(RuntimeError, "could not be reached"):
+                    self.client.api("get", "/large")
+        finally:
+            self.client.deadline = None
 
 
 @unittest.skipIf(os.name == "nt", "POSIX fake executable; native Windows needs acceptance testing")

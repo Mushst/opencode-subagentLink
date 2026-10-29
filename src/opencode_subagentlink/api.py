@@ -54,10 +54,12 @@ class Client:
         self.opener = build_opener(ProxyHandler({}), NoRedirect)
 
     def api(self, method, path, body=None, timeout=30):
+        clamped = False
         if self.deadline is not None:
             remaining = self.deadline - time.monotonic()
             if remaining <= 0:
                 raise WaitExpired()
+            clamped = remaining <= timeout
             timeout = min(timeout, remaining)
         token = base64.b64encode(("opencode:" + self.password).encode()).decode()
         headers = {"Accept": "application/json", "Authorization": "Basic " + token}
@@ -88,8 +90,10 @@ class Client:
             raise RuntimeError(f"OpenCode HTTP {code} for {method.upper()} {path.split('?')[0]}") from None
         except WaitExpired:
             raise
-        except (TimeoutError, URLError, ConnectionError):
-            if self.deadline is not None and time.monotonic() >= self.deadline:
+        except (TimeoutError, URLError, ConnectionError) as exc:
+            # A request cut to the wait budget can time out a clock tick before the deadline reads as passed.
+            timed_out = isinstance(exc, TimeoutError) or isinstance(getattr(exc, "reason", None), TimeoutError)
+            if self.deadline is not None and (time.monotonic() >= self.deadline or (clamped and timed_out)):
                 raise WaitExpired() from None
             if method.lower() != "get":
                 raise RuntimeError("OpenCode request failed; the change may have been accepted. "
