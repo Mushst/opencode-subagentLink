@@ -58,6 +58,7 @@ class Isolated(unittest.TestCase):
 
 
 class SettingsTests(Isolated):
+    @unittest.skipIf(os.name == "nt", "POSIX fake executable; native Windows needs acceptance testing")
     def test_checklist_asks_consent_then_agent_and_starts_nothing(self):
         binary = self.fake_binary()
         settings.configure(opencode=binary)
@@ -77,6 +78,7 @@ class SettingsTests(Isolated):
         self.assertEqual(status["missing"][0]["key"], "opencode")
         self.assertIn("https://opencode.ai", status["missing"][0]["ask"])
 
+    @unittest.skipIf(os.name == "nt", "POSIX fake executable; native Windows needs acceptance testing")
     def test_private_mode_consent_says_workers_stop_with_claude(self):
         settings.configure(opencode=self.fake_binary(), server="private")
         self.assertIn("interrupts running workers", setup_status()["missing"][0]["ask"])

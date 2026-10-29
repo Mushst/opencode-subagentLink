@@ -106,8 +106,9 @@ background service.
 ## Limits
 
 - Claude Code only. Claude Desktop chat and Cowork are not supported.
-- Tested on Linux with OpenCode 2.2.1. macOS and Windows run the unit tests in CI
-  but have not been tested with a real OpenCode server.
+- Tested on Linux with OpenCode 2.2.1. macOS and Windows run the unit tests in CI,
+  where Windows skips the tests that start a fake OpenCode. Neither has been
+  tested with a real OpenCode server.
 - Several servers on one OpenCode database at once (for example the built-in
   service and your own `opencode serve`) has not been tested.
 - The server must be on the same machine, at `127.0.0.1` or `localhost`.
