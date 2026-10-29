@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""Run opencode-subagentlink from a plugin folder, without installing the package."""
+
+import sys
+from pathlib import Path
+
+if sys.version_info < (3, 10):
+    sys.stderr.write('{"error": "opencode-subagentlink needs Python 3.10 or later."}\n')
+    raise SystemExit(1)
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
+from opencode_subagentlink.cli import main  # noqa: E402
+
+raise SystemExit(main())

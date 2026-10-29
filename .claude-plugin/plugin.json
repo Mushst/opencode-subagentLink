@@ -1,0 +1,17 @@
+{
+  "name": "opencode-subagentlink",
+  "displayName": "opencode-subagentLink",
+  "version": "0.1.0",
+  "description": "Unofficial. Delegate tasks from Claude Code to your OpenCode V2 agents and get the results back.",
+  "author": {"name": "Mushst"},
+  "repository": "https://github.com/Mushst/opencode-subagentLink",
+  "license": "Apache-2.0",
+  "keywords": ["opencode", "delegation", "subagents", "mcp"],
+  "mcpServers": {
+    "opencode-subagentlink": {
+      "command": "python3",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/opencode-subagentlink", "mcp"],
+      "env": {"OPENCODE_SUBAGENTLINK_HOME": "${CLAUDE_PLUGIN_DATA}"}
+    }
+  }
+}
