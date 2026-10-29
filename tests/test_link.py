@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import shlex
 import socket
+import socketserver
 import stat
 import subprocess
 import sys
@@ -316,6 +317,13 @@ class MCPTests(Isolated):
             close.assert_called_once()
 
 
+class LocalHTTPServer(ThreadingHTTPServer):
+    def server_bind(self):
+        # HTTPServer.server_bind does a reverse DNS lookup, which takes ~30 s on macOS hosts without an FQDN.
+        socketserver.TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address[:2]
+
+
 class HTTPTests(unittest.TestCase):
     def setUp(self):
         self.target_calls = []
@@ -342,7 +350,7 @@ class HTTPTests(unittest.TestCase):
                     self.end_headers()
                     self.wfile.write(data)
 
-        self.server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+        self.server = LocalHTTPServer(("127.0.0.1", 0), Handler)
         thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         thread.start()
         self.addCleanup(self.server.server_close)

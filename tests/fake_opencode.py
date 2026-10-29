@@ -8,10 +8,18 @@ from pathlib import Path
 import secrets
 import signal
 import socket
+import socketserver
 import subprocess
 import sys
 import time
 from urllib.parse import urlsplit
+
+
+class LocalHTTPServer(ThreadingHTTPServer):
+    def server_bind(self):
+        # HTTPServer.server_bind does a reverse DNS lookup, which takes ~30 s on macOS hosts without an FQDN.
+        socketserver.TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address[:2]
 
 
 def free_port():
@@ -144,7 +152,7 @@ def main():
         def do_POST(self):
             self.handle_request("post")
 
-    ThreadingHTTPServer(("127.0.0.1", port), Handler).serve_forever()
+    LocalHTTPServer(("127.0.0.1", port), Handler).serve_forever()
 
 
 if __name__ == "__main__":
