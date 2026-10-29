@@ -299,7 +299,7 @@ class MCPTests(Isolated):
             result = bridge.invoke("spawn", {"text": "Do the thing"})
         self.assertEqual(get.return_value.spawn.call_args.args[:3], (str(self.root), "Do the thing", "worker"))
         argv = shlex.split(result["completion"]["background_command"])
-        self.assertIn("wait", argv[:3])
+        self.assertIn("wait", argv[:4])  # launcher, python + launcher, or python -m package
         for flag, value in (("--home", str(settings.home())), ("--session-id", "ses_x"), ("--after", "msg_x")):
             self.assertEqual(argv[argv.index(flag) + 1], value)
         self.assertIn("ses_x", bridge.attached)
