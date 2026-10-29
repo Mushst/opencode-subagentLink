@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "opencode-subagentlink": {
-      "command": "python3",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/opencode-subagentlink", "mcp"],
-      "env": {"OPENCODE_SUBAGENTLINK_HOME": "${CLAUDE_PLUGIN_DATA}"}
-    }
-  }
-}

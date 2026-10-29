@@ -540,7 +540,9 @@ class PluginFilesTests(unittest.TestCase):
     def test_names_versions_and_paths_agree(self):
         plugin = self.load(".claude-plugin/plugin.json")
         market = self.load(".claude-plugin/marketplace.json")
-        servers = self.load(".mcp.json")["mcpServers"]
+        servers = plugin["mcpServers"]
+        # A root .mcp.json would also load as a project server in a checkout, where the plugin variables are unset.
+        self.assertFalse((ROOT / ".mcp.json").exists())
         self.assertEqual(plugin["name"], settings.NAME)
         self.assertEqual(plugin["version"], opencode_subagentlink.__version__)
         self.assertEqual(plugin["license"], "Apache-2.0")
